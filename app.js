@@ -10,6 +10,9 @@ const port = 3000
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", routes);
+app.use((req, res, next) => {
+    res.status(404).send("Page Not Found");
+})
 
 // app.get('/add-product', (req, res, next) => {
 //     res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>');
