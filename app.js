@@ -1,14 +1,29 @@
 const express = require('express')
-const app = express()
+const bodyParser = require('body-parser')
+
+const app = express();
+
+const routes = require('./routes');
+
 const port = 3000
 
-app.get('/users', (req, res) => {
-    res.send({ userName: "Dipesh" });
-})
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-    res.send("Hi there!");
-})
+app.use("/", routes);
+
+// app.get('/add-product', (req, res, next) => {
+//     res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>');
+// })
+
+// app.use('/product', (req, res, next) => {
+//     console.log(req.body);
+//     Object.keys(req.body).length === 0 ? res.redirect('/') : res.send(req.body);
+// });
+
+// app.get('/', (req, res, next) => {
+//     res.send('<h1>Hello from Express!</h1>');
+// });
+
 
 // app.get('/', (req, res, next) => {
 //     console.log("this is middleware1");
