@@ -4,6 +4,9 @@ const path = require('path');
 
 const app = express();
 
+app.set("view engine", "pug");
+app.set("views", "views")
+
 const routes = require('./routes');
 
 const port = 3000
@@ -13,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/", routes);
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
+    res.status(404).render('404', { pageTitle: 'Page Not Found' });
 })
 
 // app.get('/add-product', (req, res, next) => {
