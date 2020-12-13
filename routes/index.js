@@ -2,7 +2,9 @@ const routes = require('express').Router();
 const adminRoute = require('./adminRoute');
 const shopRoute = require('./shopRoute');
 
-routes.use('/admin', adminRoute);
+// console.log(adminRoute);
+
+routes.use('/admin', adminRoute.routes);
 routes.use('/', shopRoute);
 
 
