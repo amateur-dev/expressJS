@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/", routes);
-app.use((req, res, next) => {
-    res.status(404).render('404', { pageTitle: 'Page Not Found' });
-})
+// app.use((req, res, next) => {
+//     res.status(404).render('404', { pageTitle: 'Page Not Found' });
+// })
 
 // app.get('/add-product', (req, res, next) => {
 //     res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>');

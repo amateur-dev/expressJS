@@ -1,10 +1,9 @@
 const path = require('path');
 const express = require('express');
-
-const productController = require('../controllers/products');
-
 const router = express.Router();
 
-router.get('/', productController.allProducts);
+const pageNotFound = require('../controllers/pageNotFound');
+
+router.use(pageNotFound);
 
 module.exports = router;
