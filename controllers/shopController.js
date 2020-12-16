@@ -26,9 +26,10 @@ const getIndex = (req, res, next) => {
 }
 
 const getCart = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        res.render(path.join(path2views, 'shop', 'cart'), { products, pageTitle: 'Your Cart', path: '/cart' });
-    })
+    console.log(req.body.prodID);
+    res.render(
+        path.join(path2views, 'shop', 'cart'),
+        { message: "This is a test message", pageTitle: 'Your Cart', path: '/cart' })
 }
 
 const getOrders = (req, res, next) => {
