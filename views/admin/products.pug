@@ -4,5 +4,22 @@ block styles
     link(rel="stylesheet", href="/css/product.css")
 
 block content
-    main 
-        p Attempting to render the products page for the Admin
+    main
+        if products.length > 0
+            .grid
+                each product in products
+                    article.card.product-item
+                        header.card__header
+                            h1.product__title #{product.title}
+                        div.card__image
+                            img(src=product.imageUrl    , alt="A Book")
+                        div.card__content
+                            h2.product__price $#{product.price}
+                            p.product__description #{product.description}
+                        .card__actions
+                            button.btn Edit
+                            form(action="", method="post")
+                                button.btn(onclick="move()") Delete
+        else
+            h1 No Products
+        script function move() {window.location.href = '/'}

@@ -6,13 +6,16 @@ const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
 
-// const addProduct = (req, res, next) => {
-//     res.render(path.join(path2views, 'admin', 'add-product'), { pageTitle: 'Add Product', path: '/admin/add-product' });
-// }
-
 const getProducts = (req, res, next) => {
     ProductModel.fetchAll((products) => {
+        // console.log(products);
         res.render(path.join(path2views, 'shop', 'product-list'), { products, pageTitle: 'All Products', path: '/products' });
+    })
+}
+
+const getSpecificProduct = (req, res, next) => {
+    ProductModel.fetchSpecific(req.params.productid, (p) => {
+        res.render(path.join(path2views, 'shop', 'product-detail'), { products: p, pageTitle: 'All Products', path: '/products' });
     })
 }
 
@@ -28,6 +31,12 @@ const getCart = (req, res, next) => {
     })
 }
 
+const getOrders = (req, res, next) => {
+    ProductModel.fetchAll((products) => {
+        res.render(path.join(path2views, 'shop', 'orders'), { products, pageTitle: 'Your Orders', path: '/orders' });
+    })
+}
+
 const getCheckout = (req, res, next) => {
     ProductModel.fetchAll((products) => {
         res.render(path.join(path2views, 'shop', 'checkout'), { products, pageTitle: 'Checkout', path: '/checkout' });
@@ -36,7 +45,9 @@ const getCheckout = (req, res, next) => {
 
 module.exports = {
     getProducts,
+    getSpecificProduct,
     getIndex,
     getCart,
+    getOrders,
     getCheckout
 }
