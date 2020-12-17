@@ -5,6 +5,7 @@ const pathUtil = require('../utils/path');
 const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
+const CartModel = require('../models/cartModel');
 
 const getProducts = (req, res, next) => {
     ProductModel.fetchAll((products) => {
@@ -26,7 +27,9 @@ const getIndex = (req, res, next) => {
 }
 
 const getCart = (req, res, next) => {
-    console.log(req.body.prodID);
+    ProductModel.findById(req.body.prodID, (p) => {
+        CartModel.AddProduct(req.body.prodID, p.price)
+    })
     res.render(
         path.join(path2views, 'shop', 'cart'),
         { message: "This is a test message", pageTitle: 'Your Cart', path: '/cart' })

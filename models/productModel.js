@@ -55,6 +55,13 @@ const ProductModel = class Product {
     static fetchSpecific(id, cb) {
         goGetSpecificProduct(id, cb);
     }
+
+    static findById(id, cb) {
+        goGetProducts(products => {
+            const product = products.find(p => p.id === id);
+            cb(product);
+        });
+    }
 }
 
 module.exports = ProductModel;

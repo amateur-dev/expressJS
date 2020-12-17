@@ -22,20 +22,53 @@ However, to make it simple Dipesh is going with the first option
 
 */
 
-const CartModel = class Cart {
-    static getCurrentCart = () => {
-        fs.readFile(path2Cartfile, (err, fileContent) => {
-            if (err) {
-                let currentCart = {}
-                return currentCart;
-            }
-            return JSON.parse(fileContent)
-        })
-    }
+// const CartModel = class Cart {
+//     static getCurrentCart = () => {
+//         fs.readFile(path2Cartfile, (err, fileContent) => {
+//             if (err) {
+//                 // console.log(err);
+//                 let currentCart = {}
+//                 return currentCart;
+//             }
+//             return JSON.parse(fileContent)
+//         })
 
-    static addProduct(prodID) {
-        let currentCart = this.getCurrentCart();
-        currentCart[prodID] = +1
+//     }
+
+//     static addProduct(prodID) {
+//         //
+
+
+//     }
+// }
+const CartModel = class Cart {
+    static AddProduct(prodID, prodPrice) {
+        // fetch the old cart
+        fs.readFile(path2Cartfile, (err, fileContent) => {
+            let cart = { products: [], totalAmount: 0 };
+            if (!err) {
+                cart = JSON.parse(fileContent)
+            }
+            // see if the prod alredy exists
+            const existingProdIndex = cart.products.findIndex((p) => {
+                p.id === prodID
+            })
+            const existingProd = cart.products[existingProdIndex]
+            let updatedProduct;
+            if (existingProd) {
+                updatedProduct = { ...existingProd }
+                updatedProduct.qty++;
+                cart.products = [...cart.products]
+                cart.products[existingProdIndex] = updatedProduct
+
+            } else {
+                updatedProduct = { id: prodID, qty: 1 }
+                cart.products = [...cart.products, updatedProduct]
+            }
+            cart.totalAmount = cart.totalAmount + prodPrice;
+            fs.writeFile(path2Cartfile, JSON.stringify(cart), (e) => console.error(e))
+        })
+        // add prod or increase the qty
     }
 }
 
