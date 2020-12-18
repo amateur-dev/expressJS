@@ -27,9 +27,9 @@ const getIndex = (req, res, next) => {
 }
 
 const getCart = (req, res, next) => {
-    ProductModel.findById(req.body.prodID, (p) => {
-        CartModel.AddProduct(req.body.prodID, p.price)
-    })
+    // this route is getting the id and the price of the product from the FE
+    // req.body.prodID and req.body.price
+    CartModel.AddProduct(req.body.prodID, req.body.price);
     res.render(
         path.join(path2views, 'shop', 'cart'),
         { message: "This is a test message", pageTitle: 'Your Cart', path: '/cart' })
