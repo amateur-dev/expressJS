@@ -6,6 +6,7 @@ const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
 const CartModel = require('../models/cartModel');
+const { request } = require('express');
 
 const getProducts = (req, res, next) => {
     ProductModel.fetchAll((products) => {
@@ -26,13 +27,18 @@ const getIndex = (req, res, next) => {
     })
 }
 
+// TODO: dipesh to work on rendering the cart page
 const getCart = (req, res, next) => {
-    // this route is getting the id and the price of the product from the FE
-    // req.body.prodID and req.body.price
-    CartModel.AddProduct(req.body.prodID, req.body.price);
     res.render(
         path.join(path2views, 'shop', 'cart'),
         { message: "This is a test message", pageTitle: 'Your Cart', path: '/cart' })
+}
+
+const postCart = (req, res, next) => {
+    // this route is getting the id and the price of the product from the FE
+    // req.body.prodID and req.body.price
+    CartModel.AddProduct(req.body.prodID, req.body.price);
+    res.redirect("/products")
 }
 
 const getOrders = (req, res, next) => {
@@ -52,6 +58,7 @@ module.exports = {
     getSpecificProduct,
     getIndex,
     getCart,
+    postCart,
     getOrders,
     getCheckout
 }

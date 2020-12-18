@@ -35,7 +35,7 @@ const ProductModel = class Product {
         this.save()
     }
     save() {
-        this.id = ((Math.floor(Math.random() * 1000) + 1)).toString();
+        this.prodID = ((Math.floor(Math.random() * 1000) + 1)).toString();
         try {
             goGetProducts((products) => {
                 products.push(this);
