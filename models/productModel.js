@@ -75,6 +75,19 @@ const ProductModel = class Product {
             });
         })
     }
+
+    static deleteProduct(IdOfTheProd2BeDeleted) {
+        goGetProducts((products) => {
+            // console.log(updatedProd);
+            let prod2BeUpdatedIndex = products.findIndex((element) => 
+                element.prodID == IdOfTheProd2BeDeleted
+            )
+            products.splice(prod2BeUpdatedIndex,1);
+            fs.writeFile(path2file, JSON.stringify(products), (err) => {
+                if (err != null) { console.error(`There is an error in saving the file`) };
+            });
+        })
+    }
 }
 
 module.exports = ProductModel;

@@ -31,6 +31,10 @@ const updateProduct = (req, res, next) => {
     res.redirect("/admin/products")
 }
 
+const deleteProduct = (req, res, next) => {
+    ProductModel.deleteProduct(req.body.prodID);
+    res.redirect("/admin/products")
+}
 
 
 module.exports = {
@@ -38,5 +42,6 @@ module.exports = {
     postAddProduct,
     allProducts,
     editProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }

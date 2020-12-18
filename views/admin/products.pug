@@ -20,8 +20,9 @@ block content
                             form(action="/admin/edit-product", method="post")
                                 button.btn Edit
                                 input(type="hidden", name="product", value=product)
-                            form(action="", method="post")
+                            form(action="/admin/delete-product", method="post")
                                 button.btn(onclick="move()") Delete
+                                input(type="hidden", name="product", value=product.prodID)
         else
             h1 No Products
         script function move() {window.location.href = '/'}
