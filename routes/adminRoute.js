@@ -6,6 +6,8 @@ const productController = require('../controllers/adminController');
 
 // /admin/add-product => GET
 router.get('/add-product', productController.addProduct);
+router.post('/edit-product', productController.editProduct);
+router.post('/update-product', productController.updateProduct);
 router.get('/products', productController.allProducts);
 
 // /admin/add-product => POST

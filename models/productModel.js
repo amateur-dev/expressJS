@@ -40,7 +40,7 @@ const ProductModel = class Product {
             goGetProducts((products) => {
                 products.push(this);
                 fs.writeFile(path2file, JSON.stringify(products), (err) => {
-                    if (err == null) { console.error(`This is the ${err}`) };
+                    if (err != null) { console.error(`There is an error in saving the file`) };
                 });
             })
         } catch (err) {
@@ -61,6 +61,19 @@ const ProductModel = class Product {
             const product = products.find(p => p.id === id);
             cb(product);
         });
+    }
+
+    static updateProduct(updatedProd) {
+        goGetProducts((products) => {
+            // console.log(updatedProd);
+            let prod2BeUpdatedIndex = products.findIndex((element) => 
+                element.prodID == updatedProd.prodID
+            )
+            products[prod2BeUpdatedIndex] = updatedProd;
+            fs.writeFile(path2file, JSON.stringify(products), (err) => {
+                if (err != null) { console.error(`There is an error in saving the file`) };
+            });
+        })
     }
 }
 
