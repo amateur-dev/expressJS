@@ -29,9 +29,26 @@ const getIndex = (req, res, next) => {
 
 // TODO: dipesh to work on rendering the cart page
 const getCart = (req, res, next) => {
+    let cart = [
+        {
+            "prodID": "794",
+            "qty": 4,
+            "prodCost": 3500
+        },
+        {
+            "prodID": "569",
+            "qty": 4,
+            "prodCost": 40
+        },
+        {
+            "prodID": "391",
+            "qty": 2,
+            "prodCost": 40
+        }
+    ]
     res.render(
         path.join(path2views, 'shop', 'cart'),
-        { message: "This is a test message", pageTitle: 'Your Cart', path: '/cart' })
+        { cart: cart, pageTitle: 'Your Cart', path: '/cart' })
 }
 
 const postCart = (req, res, next) => {

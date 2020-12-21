@@ -21,8 +21,8 @@ block content
                                 button.btn Edit
                                 input(type="hidden", name="product", value=product)
                             form(action="/admin/delete-product", method="post")
-                                button.btn(onclick="move()") Delete
-                                input(type="hidden", name="product", value=product.prodID)
+                                button.btn(onclick="move()") DEL
+                                input(type="hidden", name="prodID", value=product.prodID)
         else
             h1 No Products
         script function move() {window.location.href = '/'}

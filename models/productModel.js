@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const pathUtil = require('../utils/path');
 
+const CartModel = require('./cartModel');
+
 const path2file = path.join(pathUtil, "data", "products.json");
 
 const goGetProducts = (cb) => {
@@ -78,11 +80,12 @@ const ProductModel = class Product {
 
     static deleteProduct(IdOfTheProd2BeDeleted) {
         goGetProducts((products) => {
-            // console.log(updatedProd);
+            console.log(IdOfTheProd2BeDeleted);
             let prod2BeUpdatedIndex = products.findIndex((element) => 
                 element.prodID == IdOfTheProd2BeDeleted
             )
             products.splice(prod2BeUpdatedIndex,1);
+            CartModel.deleteProduct(IdOfTheProd2BeDeleted)
             fs.writeFile(path2file, JSON.stringify(products), (err) => {
                 if (err != null) { console.error(`There is an error in saving the file`) };
             });
