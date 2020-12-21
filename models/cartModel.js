@@ -7,7 +7,7 @@ const path2Productsfile = path.join(pathUtil, "data", "products.json");
 
 const CartModelRevised = class Cart {
     static AddProduct = (prodId, prodPrice) => {
-        let cart = { products: [] };
+        let cart = [{ products: [] }];
         // read the current file and get cart
         fs.readFile(path2Cartfile, (err, fileContent) => {
             if (!err) {
@@ -54,6 +54,17 @@ const CartModelRevised = class Cart {
             });
         });
     }
+
+    static getCart(cb) {
+        fs.readFile(path2Cartfile, (err, fileContent) => {
+            if (!err) {
+                cb(JSON.parse(fileContent));
+            } else {
+                cb({})
+            }
+        })
+    }
+
 }
 
 module.exports = CartModelRevised;

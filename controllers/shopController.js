@@ -29,26 +29,24 @@ const getIndex = (req, res, next) => {
 
 // TODO: dipesh to work on rendering the cart page
 const getCart = (req, res, next) => {
-    let cart = [
-        {
-            "prodID": "794",
-            "qty": 4,
-            "prodCost": 3500
-        },
-        {
-            "prodID": "569",
-            "qty": 4,
-            "prodCost": 40
-        },
-        {
-            "prodID": "391",
-            "qty": 2,
-            "prodCost": 40
+    CartModel.getCart((cart) => 
+    {  
+        if (Object.keys(cart).length == 0) {
+            res.render(
+                path.join(path2views, 'shop', 'cart'),
+                { currentCart: [], totalAmount: 0, pageTitle: 'Your Cart', path: '/cart' })
+        } else {
+            let totalAmount = 0;
+            cart.products.forEach(e => {
+                totalAmount = totalAmount + e.prodCost
+            })
+            res.render(
+                path.join(path2views, 'shop', 'cart'),
+                { currentCart: cart.products, totalAmount, pageTitle: 'Your Cart', path: '/cart' })
         }
-    ]
-    res.render(
-        path.join(path2views, 'shop', 'cart'),
-        { cart: cart, pageTitle: 'Your Cart', path: '/cart' })
+    }
+    );
+    
 }
 
 const postCart = (req, res, next) => {
