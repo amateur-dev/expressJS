@@ -18,7 +18,6 @@ const postAddProduct = (req, res, next) => {
 }
 const allProducts = (req, res, next) => {
     ProductModel.fetchAll((products) => {
-        console.log(products);
         res.render(path.join(path2views, 'admin', 'products'), { products, pageTitle: 'Admin Products', path: '/admin/products' });
     })
 }
