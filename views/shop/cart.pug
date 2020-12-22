@@ -1,0 +1,29 @@
+extends ../layouts/main-layout.pug
+
+block styles
+    link(rel="stylesheet", href="/css/product.css")
+
+block content
+    main
+        if currentCart.length > 0
+            table(style='width:50%', border='1')
+                tr
+                    th Name of the Product
+                    th Qty
+                    th Total Cost of the Product
+                    th Action
+                each prod in currentCart
+                    tr
+                        td(style="text-align:center") #{prod.name}
+                        td(style="text-align:center") #{prod.qty}
+                        td(style="text-align:right") #{prod.prodCost.toLocaleString("en")}
+                        td(style="text-align:right")
+                            form(action="/delete-product", method="post")
+                                button.btn() Delete
+                                input(type="hidden", name="prodID", value=prod.prodID)
+                tr 
+                    td(style="text-align:center") GrandTotal
+                    td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}
+            //- h2 #{totalAmount}
+        else
+            h1 You do not have any products in the Cart
