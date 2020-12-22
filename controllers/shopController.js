@@ -9,10 +9,9 @@ const CartModel = require('../models/cartModel');
 const { request } = require('express');
 
 const getProducts = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        // console.log(products);
-        res.render(path.join(path2views, 'shop', 'product-list'), { products, pageTitle: 'All Products', path: '/products' });
-    })
+    ProductModel.fetchAll().then(([rows, fieldData]) => {
+        res.render(path.join(path2views, 'shop', 'product-list'), { products:rows, pageTitle: 'Products', path: '/products' })    
+    }).catch(err => console.error(err));
 }
 
 const getSpecificProduct = (req, res, next) => {
@@ -22,9 +21,10 @@ const getSpecificProduct = (req, res, next) => {
 }
 
 const getIndex = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        res.render(path.join(path2views, 'shop', 'index'), { products, pageTitle: 'Shop', path: '/' });
-    })
+    ProductModel.fetchAll().then(([rows, fieldData]) => {
+        res.render(path.join(path2views, 'shop', 'index'), { products:rows, pageTitle: 'Shop', path: '/' })    
+    }).catch(err => console.error(err));
+    
 }
 
 // TODO: dipesh to work on rendering the cart page

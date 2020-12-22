@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path');
+const db = require('./utils/database');
 
 const app = express();
 
@@ -8,6 +9,13 @@ app.set("view engine", "pug");
 app.set("views", "views")
 
 const routes = require('./routes');
+// db.execute('SELECT * FROM products')
+//     .then(result => {
+//         console.log(result[0], result[1]);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
 
 const port = 3000
 

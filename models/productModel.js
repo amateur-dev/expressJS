@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const pathUtil = require('../utils/path');
 
+const db = require('../utils/database');
+
 const CartModel = require('./cartModel');
 
 const path2file = path.join(pathUtil, "data", "products.json");
@@ -51,7 +53,7 @@ const ProductModel = class Product {
     }
 
     static fetchAll(cb) {
-        goGetProducts(cb);
+        return db.execute('SELECT * FROM products');
     }
 
     static fetchSpecific(id, cb) {
