@@ -11,11 +11,16 @@ block content
                     th ProdID
                     th Qty
                     th Total Cost of the Product
+                    th Action
                 each prod in currentCart
                     tr
                         td(style="text-align:center") #{prod.prodID}
                         td(style="text-align:center") #{prod.qty}
-                        td(style="text-align:right") #{prod.prodCost.toLocaleString("en")} 
+                        td(style="text-align:right") #{prod.prodCost.toLocaleString("en")}
+                        td(style="text-align:right")
+                            form(action="/delete-product", method="post")
+                                button.btn() Delete
+                                input(type="hidden", name="prodID", value=prod.prodID)
                 tr 
                     td(style="text-align:center") GrandTotal
                     td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}

@@ -68,6 +68,11 @@ const getCheckout = (req, res, next) => {
     })
 }
 
+const deleteCartProduct = (req, res, next) => {
+    CartModel.deleteProduct(req.body.prodID)
+    res.redirect("/cart");
+}
+
 module.exports = {
     getProducts,
     getSpecificProduct,
@@ -75,5 +80,6 @@ module.exports = {
     getCart,
     postCart,
     getOrders,
-    getCheckout
+    getCheckout,
+    deleteCartProduct
 }
