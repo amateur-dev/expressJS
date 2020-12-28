@@ -15,17 +15,15 @@ const ProductModel = class Product {
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.save()
+        this.save().then(() => {
+            console.log("New Product has been added to the DB");
+        })
     }
     save() {
-        this.prodID = ((Math.floor(Math.random() * 1000) + 1)).toString();
+        // id will now be generated automatically by sql
+        // this.prodID = ((Math.floor(Math.random() * 1000) + 1)).toString();
         try {
-            goGetProducts((products) => {
-                products.push(this);
-                fs.writeFile(path2file, JSON.stringify(products), (err) => {
-                    if (err != null) { console.error(`There is an error in saving the file`) };
-                });
-            })
+            return db.execute(`INSERT INTO products (title, price, description, imageUrl) VALUES (?,?,?,?)`, [this.title, this.price, this.description, this.imageUrl])
         } catch (err) {
             console.error(err);
         }

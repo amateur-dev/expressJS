@@ -13,7 +13,6 @@ const addProduct = (req, res, next) => {
 
 const postAddProduct = (req, res, next) => {
     const product = new ProductModel(req.body.title, req.body.price, req.body.description, req.body.imageUrl);
-    // product.save()
     res.redirect('/');
 }
 const allProducts = (req, res, next) => {
