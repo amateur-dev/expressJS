@@ -2,31 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 const pathUtil = require('../utils/path');
+const db = require('../utils/database');
 
 const CartModel = require('./cartModel');
 
 const path2file = path.join(pathUtil, "data", "products.json");
 
-const goGetProducts = (cb) => {
-    fs.readFile(path2file, (err, fileContent) => {
-        if (err) {
-            console.log(`There is an error in reading the file from the fetchAll function ${err}`);
-            return cb([])
-        }
-        // JSON.parse(fileContent) is an array of objects
-        cb(JSON.parse(fileContent));
-    });
-}
-
-const goGetSpecificProduct = (id, cb) => {
-    fs.readFile(path2file, (err, fileContent) => {
-        if (err) {
-            console.log(`There is an error in reading the file from the fetchAll function ${err}`);
-            return cb([])
-        }
-        cb(JSON.parse(fileContent).filter(p => p.id == id));
-    });
-}
 
 const ProductModel = class Product {
     constructor(title, price, description, imageUrl) {
@@ -50,8 +31,8 @@ const ProductModel = class Product {
         }
     }
 
-    static fetchAll(cb) {
-        goGetProducts(cb);
+    static fetchAll() {
+        return db.execute("SELECT * FROM products")
     }
 
     static fetchSpecific(id, cb) {
@@ -68,7 +49,7 @@ const ProductModel = class Product {
     static updateProduct(updatedProd) {
         goGetProducts((products) => {
             // console.log(updatedProd);
-            let prod2BeUpdatedIndex = products.findIndex((element) => 
+            let prod2BeUpdatedIndex = products.findIndex((element) =>
                 element.prodID == updatedProd.prodID
             )
             products[prod2BeUpdatedIndex] = updatedProd;
@@ -81,10 +62,10 @@ const ProductModel = class Product {
     static deleteProduct(IdOfTheProd2BeDeleted) {
         goGetProducts((products) => {
             console.log(IdOfTheProd2BeDeleted);
-            let prod2BeUpdatedIndex = products.findIndex((element) => 
+            let prod2BeUpdatedIndex = products.findIndex((element) =>
                 element.prodID == IdOfTheProd2BeDeleted
             )
-            products.splice(prod2BeUpdatedIndex,1);
+            products.splice(prod2BeUpdatedIndex, 1);
             CartModel.deleteProduct(IdOfTheProd2BeDeleted)
             fs.writeFile(path2file, JSON.stringify(products), (err) => {
                 if (err != null) { console.error(`There is an error in saving the file`) };

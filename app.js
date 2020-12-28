@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path');
 
-const db = require('./utils/database');
+// const db = require('./utils/database');
 
 const app = express();
 
@@ -11,13 +11,13 @@ app.set("views", "views")
 
 const routes = require('./routes');
 
-db.execute("SELECT * FROM products").then(
-    (res) => {
-        console.log(res[0]);
-    }
-).catch((error) => {
-    console.error(error)
-})
+// db.execute("SELECT * FROM products").then(
+//     (res) => {
+//         console.log(res[0]);
+//     }
+// ).catch((error) => {
+//     console.error(error)
+// })
 
 const port = 3000
 
