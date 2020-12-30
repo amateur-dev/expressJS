@@ -1,7 +1,5 @@
 const path = require('path');
-
 const pathUtil = require('../utils/path');
-
 const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
@@ -16,9 +14,9 @@ const postAddProduct = (req, res, next) => {
     res.redirect('/');
 }
 const allProducts = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        res.render(path.join(path2views, 'admin', 'products'), { products, pageTitle: 'Admin Products', path: '/admin/products' });
-    })
+    ProductModel.fetchAll().then((result) => {
+        res.render(path.join(path2views, 'admin', 'products'), { products: result[0], pageTitle: 'Admin Products', path: '/admin/products'})
+    }).catch(error => console.error(error))
 }
 
 const editProduct = (req, res, next) => {
@@ -26,8 +24,7 @@ const editProduct = (req, res, next) => {
 }
 
 const updateProduct = (req, res, next) => {
-    ProductModel.updateProduct(req.body);
-    res.redirect("/admin/products")
+    ProductModel.updateProduct(req.body).then(()=> res.redirect("/admin/products")).catch(err=>console.error(err));
 }
 
 const deleteProduct = (req, res, next) => {

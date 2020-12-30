@@ -33,28 +33,16 @@ const ProductModel = class Product {
         return db.execute("SELECT * FROM products")
     }
 
-    static fetchSpecific(id, cb) {
-        goGetSpecificProduct(id, cb);
+    static fetchSpecific(id) {
+        return db.execute("SELECT * FROM products WHERE products.id = ?", [id])
     }
 
-    static findById(id, cb) {
-        goGetProducts(products => {
-            const product = products.find(p => p.id === id);
-            cb(product);
-        });
+    static findById(id) {
+        return fetchSpecific(id)
     }
 
     static updateProduct(updatedProd) {
-        goGetProducts((products) => {
-            // console.log(updatedProd);
-            let prod2BeUpdatedIndex = products.findIndex((element) =>
-                element.prodID == updatedProd.prodID
-            )
-            products[prod2BeUpdatedIndex] = updatedProd;
-            fs.writeFile(path2file, JSON.stringify(products), (err) => {
-                if (err != null) { console.error(`There is an error in saving the file`) };
-            });
-        })
+        return db.execute("UPDATE products SET title = ?, price = ?, description = ?, imageUrl = ? WHERE products.id = ?", [updatedProd.title, updatedProd.price, updatedProd.description, updatedProd.imageUrl, updatedProd.prodID])
     }
 
     static deleteProduct(IdOfTheProd2BeDeleted) {

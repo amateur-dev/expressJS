@@ -1,7 +1,5 @@
 const path = require('path');
-
 const pathUtil = require('../utils/path');
-
 const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
