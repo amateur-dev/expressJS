@@ -45,18 +45,8 @@ const ProductModel = class Product {
         return db.execute("UPDATE products SET title = ?, price = ?, description = ?, imageUrl = ? WHERE products.id = ?", [updatedProd.title, updatedProd.price, updatedProd.description, updatedProd.imageUrl, updatedProd.prodID])
     }
 
-    static deleteProduct(IdOfTheProd2BeDeleted) {
-        goGetProducts((products) => {
-            console.log(IdOfTheProd2BeDeleted);
-            let prod2BeUpdatedIndex = products.findIndex((element) =>
-                element.prodID == IdOfTheProd2BeDeleted
-            )
-            products.splice(prod2BeUpdatedIndex, 1);
-            CartModel.deleteProduct(IdOfTheProd2BeDeleted)
-            fs.writeFile(path2file, JSON.stringify(products), (err) => {
-                if (err != null) { console.error(`There is an error in saving the file`) };
-            });
-        })
+    static deleteProduct(product) {
+        return db.execute("DELETE FROM products WHERE (id = ?)", [product.id])
     }
 }
 

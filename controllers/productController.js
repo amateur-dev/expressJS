@@ -28,8 +28,11 @@ const updateProduct = (req, res, next) => {
 }
 
 const deleteProduct = (req, res, next) => {
-    ProductModel.deleteProduct(req.body.prodID);
-    res.redirect("/admin/products")
+    ProductModel.deleteProduct(req.body.product).then(() => {
+        res.redirect("/admin/products")    
+    }).catch((err) => {
+        console.error(err)
+    })
 }
 
 
