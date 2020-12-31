@@ -2,24 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path');
 
-// const db = require('./utils/database');
+const routes = require('./routes');
+const sequelize = require('./utils/database');
 
 const app = express();
 
 app.set("view engine", "pug");
 app.set("views", "views")
-
-const routes = require('./routes');
-
-// db.execute("SELECT * FROM products").then(
-//     (res) => {
-//         console.log(res[0]);
-//     }
-// ).catch((error) => {
-//     console.error(error)
-// })
-
-const port = 3000
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -57,6 +46,11 @@ app.use("/", routes);
 //     res.send('Hello World from the last block');
 // })
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+sequelize.sync().then((result) => {
+    app.listen(3000, () => {
+        console.log(`Example app listening at http://localhost:3000`)
+    })
+}).catch((err) => {
+    console.error(err)
+});
+
