@@ -2,7 +2,7 @@ const path = require('path');
 const pathUtil = require('../utils/path');
 const path2views = path.join(pathUtil, "views");
 
-const ProductModel = require('../models/productModel');
+const Product = require('../models/productModel');
 const { json } = require('express');
 
 const addProduct = (req, res, next) => {
@@ -10,8 +10,14 @@ const addProduct = (req, res, next) => {
 }
 
 const postAddProduct = (req, res, next) => {
-    const product = new ProductModel(req.body.title, req.body.price, req.body.description, req.body.imageUrl);
-    res.redirect('/');
+    Product.create({
+        title: req.body.title,
+        price: req.body.price,
+        imageUrl: req.body.imageUrl,
+        description: req.body.description
+    }).then((res) => {
+        console.log(result);
+    }).catch(error=> console.log(error))
 }
 const allProducts = (req, res, next) => {
     ProductModel.fetchAll().then((result) => {

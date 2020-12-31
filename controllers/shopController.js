@@ -8,9 +8,9 @@ const { request } = require('express');
 const { error } = require('console');
 
 const getProducts = (req, res, next) => {
-    ProductModel.fetchAll().then((result) => {
-        res.render(path.join(path2views, 'shop', 'index'), { products: result[0], pageTitle: 'All Products', path: '/products'})
-    }).catch(error => console.error(error))
+    ProductModel.findAll().then((result) => {
+        res.render(path.join(path2views, 'shop', 'index'), { products: result, pageTitle: 'All Products', path: '/products' });
+    });
 }
 
 const getSpecificProduct = (req, res, next) => {
@@ -20,9 +20,9 @@ const getSpecificProduct = (req, res, next) => {
 }
 
 const getIndex = (req, res, next) => {
-    ProductModel.fetchAll().then((result) => {
-        res.render(path.join(path2views, 'shop', 'index'), { products: result[0], pageTitle: 'Shop', path: '/'})
-    }).catch(error => console.error(error))
+    ProductModel.findAll().then((result) => {
+        res.render(path.join(path2views, 'shop', 'index'), { products: result, pageTitle: 'Shop', path: '/' });
+    })
 }
 
 // TODO: dipesh to work on rendering the cart page
@@ -39,10 +39,10 @@ const getCart = (req, res, next) => {
                     totalAmount = totalAmount + e.prodCost
                 })
                 cart.products.forEach(e => {
-                    let item = products.find(element => 
+                    let item = products.find(element =>
                         element.prodID == e.prodID
                     )
-                    e.name = item.title                
+                    e.name = item.title
                 })
                 res.render(
                     path.join(path2views, 'shop', 'cart'),
