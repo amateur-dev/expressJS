@@ -4,6 +4,8 @@ const path = require('path');
 
 const routes = require('./routes');
 const sequelize = require('./utils/database');
+const ProductModel = require('./models/productModel')
+const UserModel = require('./models/userModel')
 
 const app = express();
 
@@ -46,7 +48,10 @@ app.use("/", routes);
 //     res.send('Hello World from the last block');
 // })
 
-sequelize.sync().then((result) => {
+ProductModel.belongsTo(UserModel, {constraints: true, onDelete: "CASCADE"})
+UserModel.hasMany(ProductModel);
+
+sequelize.sync({force: true}).then((result) => {
     app.listen(3000, () => {
         console.log(`Example app listening at http://localhost:3000`)
     })
