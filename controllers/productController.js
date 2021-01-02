@@ -16,7 +16,7 @@ const postAddProduct = (req, res, next) => {
         price: req.body.price,
         imageUrl: req.body.imageUrl,
         description: req.body.description
-    }).then().catch(error => console.log(error))
+    }).then(() => res.redirect("products")).catch(error => console.log(error))
 }
 const allProducts = (req, res, next) => {
     ProductModel.findAll().then((result) => {
