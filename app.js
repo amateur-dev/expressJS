@@ -4,8 +4,11 @@ const path = require('path');
 
 const routes = require('./routes');
 const sequelize = require('./utils/database');
-const ProductModel = require('./models/productModel')
-const UserModel = require('./models/userModel')
+const Product = require('./models/productModel')
+const Cart = require('./models/cartModel')
+const CartItem = require('./models/cart-itemModel');
+const User = require('./models/userModel');
+
 
 const app = express();
 
@@ -55,14 +58,19 @@ app.use("/", routes);
 //     res.send('Hello World from the last block');
 // })
 
-ProductModel.belongsTo(UserModel, { constraints: true, onDelete: "CASCADE" })
-UserModel.hasMany(ProductModel);
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" })
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, {through: CartItem});
+Product.belongsToMany(Cart, {through: CartItem})
 
-sequelize.sync().then((res) => {
-    return UserModel.findByPk(1)
+
+sequelize.sync({force: true}).then((res) => {
+    return User.findByPk(1)
 }).then(user => {
     if (!user) {
-        return UserModel.create({
+        return User.create({
             name: "Dipesh",
             email: "dipeshsukhani@gmail.com"
         })
