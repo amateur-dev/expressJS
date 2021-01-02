@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-    UserModel.findByPk(1).then((user) => {
+    User.findByPk(1).then((user) => {
         req.user = user;
         next();
     }).catch(err => console.log(err))
@@ -66,7 +66,7 @@ Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem})
 
 
-sequelize.sync({force: true}).then((res) => {
+sequelize.sync({force: false}).then((res) => {
     return User.findByPk(1)
 }).then(user => {
     if (!user) {
@@ -76,8 +76,10 @@ sequelize.sync({force: true}).then((res) => {
         })
     }
     return Promise.resolve(user);
-}).then(
-    user => {
+}).then((user) => 
+    {user.createCart()}
+)
+.then(() => {
         // console.log(user);
         app.listen(3000, () => {
             console.log("Example app listening at http://localhost:3000")

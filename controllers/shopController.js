@@ -14,7 +14,7 @@ const getProducts = (req, res, next) => {
 }
 
 const getSpecificProduct = (req, res, next) => {
-    ProductModel.findByPk(req.params.productid).then((result) => {res.render(path.join(path2views, 'shop', 'product-detail'), { products: result, pageTitle: 'All Products', path: '/products' })})
+    ProductModel.findByPk(req.params.productid).then((result) => { res.render(path.join(path2views, 'shop', 'product-detail'), { products: result, pageTitle: 'All Products', path: '/products' }) })
     // ProductModel.fetchSpecific(req.params.productid, (p) => {
     //     res.render(path.join(path2views, 'shop', 'product-detail'), { products: p, pageTitle: 'All Products', path: '/products' });
     // })
@@ -26,31 +26,40 @@ const getIndex = (req, res, next) => {
     })
 }
 
-
+// TODO: WIP
 const getCart = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        CartModel.getCart((cart) => {
-            if (Object.keys(cart).length == 0) {
-                res.render(
-                    path.join(path2views, 'shop', 'cart'),
-                    { currentCart: [], totalAmount: 0, pageTitle: 'Your Cart', path: '/cart' })
-            } else {
-                let totalAmount = 0;
-                cart.products.forEach(e => {
-                    totalAmount = totalAmount + e.prodCost
-                })
-                cart.products.forEach(e => {
-                    let item = products.find(element =>
-                        element.prodID == e.prodID
-                    )
-                    e.name = item.title
-                })
-                res.render(
-                    path.join(path2views, 'shop', 'cart'),
-                    { currentCart: cart.products, totalAmount, pageTitle: 'Your Cart', path: '/cart' })
-            }
-        })
-    })
+    req.user.getCart().then((cart) => {
+        return cart.getProducts()
+    }).then((productsInCart) => {
+        res.render(
+            path.join(path2views, 'shop', 'cart'),
+            { currentCart: productsInCart, pageTitle: 'Your Cart', path: '/cart' })
+    }).catch((err) => {
+        console.error(err);
+    });
+    // ProductModel.fetchAll((products) => {
+    //     CartModel.getCart((cart) => {
+    //         if (Object.keys(cart).length == 0) {
+    //             res.render(
+    //                 path.join(path2views, 'shop', 'cart'),
+    //                 { currentCart: [], totalAmount: 0, pageTitle: 'Your Cart', path: '/cart' })
+    //         } else {
+    //             let totalAmount = 0;
+    //             cart.products.forEach(e => {
+    //                 totalAmount = totalAmount + e.prodCost
+    //             })
+    //             cart.products.forEach(e => {
+    //                 let item = products.find(element =>
+    //                     element.prodID == e.prodID
+    //                 )
+    //                 e.name = item.title
+    //             })
+    //             res.render(
+    //                 path.join(path2views, 'shop', 'cart'),
+    //                 { currentCart: cart.products, totalAmount, pageTitle: 'Your Cart', path: '/cart' })
+    //         }
+    //     })
+    // })
 }
 
 const postCart = (req, res, next) => {

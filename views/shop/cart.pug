@@ -21,9 +21,9 @@ block content
                             form(action="/delete-product", method="post")
                                 button.btn() Delete
                                 input(type="hidden", name="prodID", value=prod.prodID)
-                tr 
-                    td(style="text-align:center") GrandTotal
-                    td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}
+                //- tr 
+                //-     td(style="text-align:center") GrandTotal
+                //-     td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}
             //- h2 #{totalAmount}
         else
             h1 You do not have any products in the Cart
