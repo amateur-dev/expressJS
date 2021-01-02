@@ -48,14 +48,27 @@ app.use("/", routes);
 //     res.send('Hello World from the last block');
 // })
 
-ProductModel.belongsTo(UserModel, {constraints: true, onDelete: "CASCADE"})
+ProductModel.belongsTo(UserModel, { constraints: true, onDelete: "CASCADE" })
 UserModel.hasMany(ProductModel);
 
-sequelize.sync({force: true}).then((result) => {
-    app.listen(3000, () => {
-        console.log(`Example app listening at http://localhost:3000`)
-    })
-}).catch((err) => {
+sequelize.sync().then((res) => {
+    return UserModel.findByPk(1)
+}).then(user => {
+    if (!user) {
+        return UserModel.create({
+            name: "Dipesh",
+            email: "dipeshsukhani@gmail.com"
+        })
+    }
+    return Promise.resolve(user);
+}).then(
+    user => {
+        // console.log(user);
+        app.listen(3000, () => {
+            console.log("Example app listening at http://localhost:3000")
+        })
+    }
+).catch((err) => {
     console.error(err)
 });
 
