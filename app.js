@@ -15,6 +15,13 @@ app.set("views", "views")
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    UserModel.findByPk(1).then((user) => {
+        req.user = user;
+        next();
+    }).catch(err => console.log(err))
+})
+
 app.use("/", routes);
 // app.use((req, res, next) => {
 //     res.status(404).render('404', { pageTitle: 'Page Not Found' });

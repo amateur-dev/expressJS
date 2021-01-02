@@ -11,7 +11,7 @@ const addProduct = (req, res, next) => {
 }
 
 const postAddProduct = (req, res, next) => {
-    ProductModel.create({
+    req.user.createProduct({
         title: req.body.title,
         price: req.body.price,
         imageUrl: req.body.imageUrl,
@@ -49,15 +49,16 @@ const deleteProduct = (req, res, next) => {
     }).then(() => {
         res.redirect("/admin/products")
     }).catch((err) => {
-        console.error(err) })
-    }
+        console.error(err)
+    })
+}
 
 
 module.exports = {
-            addProduct,
-            postAddProduct,
-            allProducts,
-            editProduct,
-            updateProduct,
-            deleteProduct
-        }
+    addProduct,
+    postAddProduct,
+    allProducts,
+    editProduct,
+    updateProduct,
+    deleteProduct
+}
