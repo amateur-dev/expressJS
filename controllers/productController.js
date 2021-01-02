@@ -19,9 +19,7 @@ const postAddProduct = (req, res, next) => {
     }).then(() => res.redirect("products")).catch(error => console.log(error))
 }
 const allProducts = (req, res, next) => {
-    ProductModel.findAll().then((result) => {
-        res.render(path.join(path2views, 'admin', 'products'), { products: result, pageTitle: 'Admin Products', path: '/admin/products' })
-    }).catch(error => console.error(error))
+    req.user.getProducts().then((result) => { res.render(path.join(path2views, 'admin', 'products'), { products: result, pageTitle: 'Admin Products', path: '/admin/products' }) }).catch(err => console.error(err))
 }
 
 const editProduct = (req, res, next) => {
@@ -29,7 +27,6 @@ const editProduct = (req, res, next) => {
 }
 
 const updateProduct = (req, res, next) => {
-    // console.log(req.body)
     ProductModel.update({
         title: req.body.title,
         price: req.body.price,
