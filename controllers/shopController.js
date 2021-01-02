@@ -14,9 +14,10 @@ const getProducts = (req, res, next) => {
 }
 
 const getSpecificProduct = (req, res, next) => {
-    ProductModel.fetchSpecific(req.params.productid, (p) => {
-        res.render(path.join(path2views, 'shop', 'product-detail'), { products: p, pageTitle: 'All Products', path: '/products' });
-    })
+    ProductModel.findByPk(req.params.productid).then((result) => {res.render(path.join(path2views, 'shop', 'product-detail'), { products: result, pageTitle: 'All Products', path: '/products' })})
+    // ProductModel.fetchSpecific(req.params.productid, (p) => {
+    //     res.render(path.join(path2views, 'shop', 'product-detail'), { products: p, pageTitle: 'All Products', path: '/products' });
+    // })
 }
 
 const getIndex = (req, res, next) => {
@@ -25,7 +26,7 @@ const getIndex = (req, res, next) => {
     })
 }
 
-// TODO: dipesh to work on rendering the cart page
+
 const getCart = (req, res, next) => {
     ProductModel.fetchAll((products) => {
         CartModel.getCart((cart) => {
