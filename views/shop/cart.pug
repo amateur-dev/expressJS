@@ -20,7 +20,7 @@ block content
                         td(style="text-align:right")
                             form(action="/delete-product", method="post")
                                 button.btn() Delete
-                                input(type="hidden", name="prodID", value=prod.prodID)
+                                input(type="hidden", name="prodID", value=prod.id)
                 tr 
                     td(style="text-align:center") GrandTotal
                     td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}
