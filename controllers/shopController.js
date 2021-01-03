@@ -31,52 +31,45 @@ const getCart = (req, res, next) => {
     req.user.getCart().then((cart) => {
         return cart.getProducts()
     }).then((productsInCart) => {
+        // console.log(productsInCart)
+        // console.log(productsInCart[0].cartitem.quantity)
+        // console.log(productsInCart[0].cartitem.amount)
+        let totalAmount = 0;
+        productsInCart.forEach(product => {
+            // console.log(product.cartitem.amount)
+            totalAmount = totalAmount+product.cartitem.amount
+        });
         res.render(
             path.join(path2views, 'shop', 'cart'),
-            { currentCart: productsInCart, pageTitle: 'Your Cart', path: '/cart' })
+            { currentCart: productsInCart, totalAmount: totalAmount, pageTitle: 'Your Cart', path: '/cart' })
     }).catch((err) => {
         console.error(err);
     });
-    // ProductModel.fetchAll((products) => {
-    //     CartModel.getCart((cart) => {
-    //         if (Object.keys(cart).length == 0) {
-    //             res.render(
-    //                 path.join(path2views, 'shop', 'cart'),
-    //                 { currentCart: [], totalAmount: 0, pageTitle: 'Your Cart', path: '/cart' })
-    //         } else {
-    //             let totalAmount = 0;
-    //             cart.products.forEach(e => {
-    //                 totalAmount = totalAmount + e.prodCost
-    //             })
-    //             cart.products.forEach(e => {
-    //                 let item = products.find(element =>
-    //                     element.prodID == e.prodID
-    //                 )
-    //                 e.name = item.title
-    //             })
-    //             res.render(
-    //                 path.join(path2views, 'shop', 'cart'),
-    //                 { currentCart: cart.products, totalAmount, pageTitle: 'Your Cart', path: '/cart' })
-    //         }
-    //     })
-    // })
 }
 
 const postCart = (req, res, next) => {
     // req.body.prodID is the ID of the product and req.body.price is the price of the product when it was added to the cart
     // CartModel.AddProduct(req.body.prodID, req.body.price);
-    let fetchedCart;
-    req.user.getCart().then((cart) => {
-        fetchedCart = cart;
-        return cart.getProducts({where: {id: req.body.prodID}})
+    let fetchedCart;  // this is just declaring a variable
+    req.user.getCart().then((cart) => {  // here we are getting the cart of the user
+        fetchedCart = cart; // assigning it to the variable declared above
+        return cart.getProducts({where: {id: req.body.prodID}}) // here we are attempting to get the info of prod (from the prod table)(using the prodId), but filtering it if it already exists in the cart.  Which means that if the product does not exist in the cart, will not show up.
     }).then((products) => {
+        // console.log(products); // this is an empty array if the product that is being added to the cart is not already exisiting in the cart
         let product;
         let newQuantity = 1;
         if (products.length>0){
             product = products[0];
         }
         if (product) {
-            // WIP
+            let oldQuantity = product.cartitem.quantity;
+            let oldAmount = product.cartitem.amount;
+            return fetchedCart.addProduct(product, { // even though this command it addProduct it is actually just updating the quantity and the amount of the previosuly existing product
+                through: {
+                    quantity: oldQuantity+newQuantity,
+                    amount: oldAmount+product.price
+                }
+            })
         }
         return ProductModel.findByPk(req.body.prodID).then((product)=> {
             return fetchedCart.addProduct(product, {through: {
