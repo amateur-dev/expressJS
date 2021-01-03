@@ -14,9 +14,9 @@ block content
                     th Action
                 each prod in currentCart
                     tr
-                        td(style="text-align:center") #{prod.name}
-                        td(style="text-align:center") #{prod.qty}
-                        td(style="text-align:right") #{prod.prodCost.toLocaleString("en")}
+                        td(style="text-align:center") #{prod.title}
+                        td(style="text-align:center") #{prod.cartitem.quantity}
+                        td(style="text-align:right") #{prod.cartitem.amount.toLocaleString("en")}
                         td(style="text-align:right")
                             form(action="/delete-product", method="post")
                                 button.btn() Delete

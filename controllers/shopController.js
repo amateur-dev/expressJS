@@ -26,7 +26,7 @@ const getIndex = (req, res, next) => {
     })
 }
 
-// TODO: WIP
+
 const getCart = (req, res, next) => {
     req.user.getCart().then((cart) => {
         return cart.getProducts()
@@ -63,10 +63,32 @@ const getCart = (req, res, next) => {
 }
 
 const postCart = (req, res, next) => {
-    // this route is getting the id and the price of the product from the FE
-    // req.body.prodID and req.body.price
-    CartModel.AddProduct(req.body.prodID, req.body.price);
-    res.redirect("/products")
+    // req.body.prodID is the ID of the product and req.body.price is the price of the product when it was added to the cart
+    // CartModel.AddProduct(req.body.prodID, req.body.price);
+    let fetchedCart;
+    req.user.getCart().then((cart) => {
+        fetchedCart = cart;
+        return cart.getProducts({where: {id: req.body.prodID}})
+    }).then((products) => {
+        let product;
+        let newQuantity = 1;
+        if (products.length>0){
+            product = products[0];
+        }
+        if (product) {
+            // WIP
+        }
+        return ProductModel.findByPk(req.body.prodID).then((product)=> {
+            return fetchedCart.addProduct(product, {through: {
+                quantity: newQuantity,
+                amount: product.price
+            }})
+        })
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+    res.redirect("/cart")
 }
 
 const getOrders = (req, res, next) => {

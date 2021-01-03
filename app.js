@@ -76,8 +76,8 @@ sequelize.sync({force: false}).then((res) => {
         })
     }
     return Promise.resolve(user);
-}).then((user) => 
-    {user.createCart()}
+}).then((user) => {}
+    // {user.createCart()}
 )
 .then(() => {
         // console.log(user);
