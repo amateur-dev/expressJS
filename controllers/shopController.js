@@ -104,7 +104,7 @@ const createOrder = (req, res, next) => {
                 }))
             });
         }).then((result) => {
-            // fetchedCart.setProducts(null)
+            fetchedCart.setProducts(null)
             // console.log(result)
             res.redirect("/orders")
         })
@@ -117,13 +117,7 @@ const createOrder = (req, res, next) => {
 const getOrders = (req, res, next) => {
     req.user
         .getOrders({ include: ['products'] })
-        .then(orders => {
-            // orders.forEach(order => {
-            //     let products = order.products;
-            //     products.forEach(prod => {
-            //         console.log(prod.orderitem)
-            //     })
-            // })            
+        .then(orders => {         
             res.render('shop/orders', {
                 path: '/orders',
                 pageTitle: 'Your Orders',
