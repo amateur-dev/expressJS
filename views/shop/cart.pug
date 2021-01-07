@@ -24,6 +24,8 @@ block content
                 tr 
                     td(style="text-align:center") GrandTotal
                     td(colspan="2", style="text-align:right") #{totalAmount.toLocaleString("en")}
-            //- h2 #{totalAmount}
+            form(action="/create-order", method="post")
+                button.btn() Order
+                input(type="hidden", name="orderedProducts", value=currentCart)
         else
             h1 You do not have any products in the Cart

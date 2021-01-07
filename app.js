@@ -5,9 +5,11 @@ const path = require('path');
 const routes = require('./routes');
 const sequelize = require('./utils/database');
 const Product = require('./models/productModel')
-const Cart = require('./models/cartModel')
-const CartItem = require('./models/cart-itemModel');
 const User = require('./models/userModel');
+const Cart = require('./models/cartModel')
+const Order = require('./models/orderModel')
+const CartItem = require('./models/cart-itemModel');
+const OrderItem = require('./models/order-itemModel');
 
 
 const app = express();
@@ -34,8 +36,8 @@ app.use("/", routes);
 //     res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>');
 // })
 
-// app.use('/product', (req, res, next) => {
 //     console.log(req.body);
+    // app.use('/product', (req, res, next) => {
 //     Object.keys(req.body).length === 0 ? res.redirect('/') : res.send(req.body);
 // });
 
@@ -64,6 +66,9 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem})
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {through: OrderItem})
 
 
 sequelize.sync({force: false}).then((res) => {
@@ -76,7 +81,8 @@ sequelize.sync({force: false}).then((res) => {
         })
     }
     return Promise.resolve(user);
-}).then((user) => {}
+}).then((user) => 
+    {}
     // {user.createCart()}
 )
 .then(() => {

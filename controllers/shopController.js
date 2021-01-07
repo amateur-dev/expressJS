@@ -4,8 +4,7 @@ const path2views = path.join(pathUtil, "views");
 
 const ProductModel = require('../models/productModel');
 const CartModel = require('../models/cartModel');
-const { request } = require('express');
-const { error } = require('console');
+const Order = require('../models/orderModel');
 
 const getProducts = (req, res, next) => {
     ProductModel.findAll().then((result) => {
@@ -37,7 +36,7 @@ const getCart = (req, res, next) => {
         let totalAmount = 0;
         productsInCart.forEach(product => {
             // console.log(product.cartitem.amount)
-            totalAmount = totalAmount+product.cartitem.amount
+            totalAmount = totalAmount + product.cartitem.amount
         });
         res.render(
             path.join(path2views, 'shop', 'cart'),
@@ -53,12 +52,12 @@ const postCart = (req, res, next) => {
     let fetchedCart;  // this is just declaring a variable
     req.user.getCart().then((cart) => {  // here we are getting the cart of the user
         fetchedCart = cart; // assigning it to the variable declared above
-        return cart.getProducts({where: {id: req.body.prodID}}) // here we are attempting to get the info of prod (from the prod table)(using the prodId), but filtering it if it already exists in the cart.  Which means that if the product does not exist in the cart, will not show up.
+        return cart.getProducts({ where: { id: req.body.prodID } }) // here we are attempting to get the info of prod (from the prod table)(using the prodId), but filtering it if it already exists in the cart.  Which means that if the product does not exist in the cart, will not show up.
     }).then((products) => {
         // console.log(products); // this is an empty array if the product that is being added to the cart is not already exisiting in the cart
         let product;
         let newQuantity = 1;
-        if (products.length>0){
+        if (products.length > 0) {
             product = products[0];
         }
         if (product) {
@@ -66,41 +65,81 @@ const postCart = (req, res, next) => {
             let oldAmount = product.cartitem.amount;
             return fetchedCart.addProduct(product, { // even though this command it addProduct it is actually just updating the quantity and the amount of the previosuly existing product
                 through: {
-                    quantity: oldQuantity+newQuantity,
-                    amount: oldAmount+product.price
+                    quantity: oldQuantity + newQuantity,
+                    amount: oldAmount + product.price
                 }
             })
         }
-        return ProductModel.findByPk(req.body.prodID).then((product)=> {
-            return fetchedCart.addProduct(product, {through: {
-                quantity: newQuantity,
-                amount: product.price
-            }})
+        return ProductModel.findByPk(req.body.prodID).then((product) => {
+            return fetchedCart.addProduct(product, {
+                through: {
+                    quantity: newQuantity,
+                    amount: product.price
+                }
+            })
         })
     })
-    .catch((err) => {
-        console.error(err);
-    });
+        .catch((err) => {
+            console.error(err);
+        });
     res.redirect("/cart")
 }
 
-const getOrders = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        res.render(path.join(path2views, 'shop', 'orders'), { products, pageTitle: 'Your Orders', path: '/orders' });
-    })
+const createOrder = (req, res, next) => {
+    let fetchedCart;
+    req.user.getCart()
+        .then((cart) => {
+            console.log(cart)
+            fetchedCart = cart
+            return cart.getProducts()
+        })
+        .then((products) => {
+            return req.user.createOrder().then(order => {
+                order.addProduct(products.map(product => {
+                    product.orderitem = {
+                        quantity: product.cartitem.quantity,
+                        amount: product.cartitem.amount
+                    };
+                    return product
+                }))
+            });
+        }).then((result) => {
+            // fetchedCart.setProducts(null)
+            // console.log(result)
+            res.redirect("/orders")
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+
 }
 
-const getCheckout = (req, res, next) => {
-    ProductModel.fetchAll((products) => {
-        res.render(path.join(path2views, 'shop', 'checkout'), { products, pageTitle: 'Checkout', path: '/checkout' });
-    })
-}
+const getOrders = (req, res, next) => {
+    req.user
+        .getOrders({ include: ['products'] })
+        .then(orders => {
+            // orders.forEach(order => {
+            //     let products = order.products;
+            //     products.forEach(prod => {
+            //         console.log(prod.orderitem)
+            //     })
+            // })            
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders
+            });
+        })
+        .catch(err => console.log(err));
+};
 
 const deleteCartProduct = (req, res, next) => {
     req.user.getCart().then((cart) => {
-        cart.getProducts({where: {
-            id: req.body.prodID
-        }}).then((products) => {
+        cart.getProducts({
+            where: {
+                id: req.body.prodID
+            }
+        }).then((products) => {
             let product = products[0]
             return product.cartitem.destroy()
         }).then((result) => {
@@ -109,7 +148,7 @@ const deleteCartProduct = (req, res, next) => {
     }).catch((err) => {
         console.error(err);
     });
-    
+
 }
 
 module.exports = {
@@ -118,7 +157,7 @@ module.exports = {
     getIndex,
     getCart,
     postCart,
+    createOrder,
     getOrders,
-    getCheckout,
     deleteCartProduct
 }
