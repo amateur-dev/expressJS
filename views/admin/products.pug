@@ -22,7 +22,7 @@ block content
                                 input(type="hidden", name="product", value=product)
                             form(action="/admin/delete-product", method="post")
                                 button.btn() Delete
-                                input(type="hidden", name="prodID", value=product.prodID)
+                                input(type="hidden", name="product", value=product)
         else
             h1 No Products
         script function move() {window.location.href = '/'}
