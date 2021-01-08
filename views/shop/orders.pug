@@ -5,4 +5,23 @@ block styles
 
 block content
     main
-        p This is the orders page
+        if orders.length > 0
+            table(style='width:50%', border='1')
+                tr Details of the Orders
+                    each order in orders
+                        tr 
+                            td Order No: #{order.id}
+                                tr 
+                                    th Product ID
+                                    th Product Title
+                                    th Quantity
+                                    th Amount
+                                each product in order.products
+                                    tr 
+                                        td #{product.id}
+                                        td #{product.title}
+                                        td #{product.orderitem.quantity}
+                                        td #{product.orderitem.amount}
+        else
+            h1 You have no orders till now
+                        
